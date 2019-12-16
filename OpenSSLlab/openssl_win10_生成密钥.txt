@@ -1,0 +1,16 @@
+第一步：生成私钥，这里我们指定私钥的长度为2048
+
+openssl genrsa -out rsa_private_key.pem 2048
+
+第二步：根据私钥生成对应的公钥：
+
+openssl rsa -in rsa_private_key.pem -pubout -out rsa_public_key_2048.pem
+
+PKCS1私钥转换为PKCS8(该格式一般Java调用)
+
+openssl pkcs8 -topk8 -inform PEM -in rsa_private_key.pem -outform pem -nocrypt -out rsa_private_key_2048_pkcs8.pem
+
+PKCS8格式私钥转换为PKCS1（传统私钥格式）
+
+openssl rsa -in rsa_private_key_2048_pkcs8.pem -out rsa_private_key_2048_pkcs1.pem
+
