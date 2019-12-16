@@ -1,0 +1,10 @@
+﻿  EncryptorDES.cpp
+D:\study\c++\code\openssl\OpenSSLlab\OpenSSLlab\EncryptorDES.cpp(17,14): warning C4244: “初始化”: 从“std::streamoff”转换到“int”，可能丢失数据
+D:\study\c++\code\openssl\OpenSSLlab\OpenSSLlab\EncryptorDES.cpp(71,14): warning C4244: “初始化”: 从“std::streamoff”转换到“int”，可能丢失数据
+D:\study\c++\code\openssl\OpenSSLlab\OpenSSLlab\EncryptorDES.cpp(122,14): warning C4244: “初始化”: 从“std::streamoff”转换到“int”，可能丢失数据
+D:\study\c++\code\openssl\OpenSSLlab\OpenSSLlab\EncryptorDES.cpp(175,14): warning C4244: “初始化”: 从“std::streamoff”转换到“int”，可能丢失数据
+D:\study\c++\code\openssl\OpenSSLlab\OpenSSLlab\EncryptorDES.cpp(168,19): warning C4101: “keydata”: 未引用的局部变量
+D:\study\c++\code\openssl\OpenSSLlab\OpenSSLlab\EncryptorDES.cpp(244,14): warning C4244: “初始化”: 从“std::streamoff”转换到“int”，可能丢失数据
+D:\study\c++\code\openssl\OpenSSLlab\OpenSSLlab\EncryptorDES.cpp(304,14): warning C4244: “初始化”: 从“std::streamoff”转换到“int”，可能丢失数据
+D:\study\c++\code\openssl\OpenSSLlab\OpenSSLlab\EncryptorDES.cpp(297,19): warning C4101: “keydata”: 未引用的局部变量
+  OpenSSLlab.vcxproj -> D:\study\c++\code\openssl\OpenSSLlab\Debug\OpenSSLlab.exe

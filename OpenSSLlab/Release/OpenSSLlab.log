@@ -1,0 +1,6 @@
+﻿  test.cpp
+D:\study\c++\code\openssl\OpenSSLlab\OpenSSLlab\test.cpp(70,23): warning C4018: “<”: 有符号/无符号不匹配
+D:\study\c++\code\openssl\OpenSSLlab\OpenSSLlab\test.cpp(87,12): error C2059: 语法错误:“;”
+D:\study\c++\code\openssl\OpenSSLlab\OpenSSLlab\test.cpp(88,5): error C2059: 语法错误:“return”
+D:\study\c++\code\openssl\OpenSSLlab\OpenSSLlab\test.cpp(89,1): error C2059: 语法错误:“}”
+D:\study\c++\code\openssl\OpenSSLlab\OpenSSLlab\test.cpp(89,1): error C2143: 语法错误: 缺少“;”(在“}”的前面)
