@@ -4,25 +4,29 @@
 #include    <fstream>
 void EncryptorDES::Encrypt()
 {
+    cout << "====================================DES加密==================================" << endl;
     string key,path;
-    unsigned char in[1024*15];
+    //unsigned char in[1024*15];
     cout << "enter the file name" << endl;
     cin >> path;
     cout << "enter the key" << endl;
     cin >> key;
 
-
     ifstream infile(path,ios::in|ios::binary);
     infile.seekg(0, ios::end);
     int size = infile.tellg();
     infile.seekg(0, ios::beg);
+
     cout << "file size" << size << endl;
+    unsigned char* in = new unsigned char[size]();
+
     if (!infile)
     {
         cout << "open error \n";
         return;
     }
-    infile.read((char*)&in, sizeof(in));
+
+    infile.read((char*)in, size);
     infile.close();
 
     static unsigned char cbc_iv[8] = { '0', '1', 'A', 'B', 'a', 'b', '9', '8' };
@@ -51,15 +55,16 @@ void EncryptorDES::Encrypt()
     //把加密后的密文写入新文件
     outfile.close();
     delete[] tmp;
+    delete[] in;
 
-
-    
+    cout << "=========================================DES加密完成===================================" << endl;
 }
 
 void EncryptorDES::Decrypt()
 {
+    cout << "=============================DES解密===================================" << endl;
     string key, path;
-    unsigned char in[1024 * 15];
+ //   unsigned char in[1024 * 15];
     cout << "enter the file name" << endl;
     cin >> path;
     cout << "enter the key" << endl;
@@ -70,7 +75,10 @@ void EncryptorDES::Decrypt()
     infile.seekg(0, ios::end);
     int size = infile.tellg();
     infile.seekg(0, ios::beg);
+
+
     cout << "encrypted file size" << size << endl;
+
     if (!infile)
     {
         cout << "open error \n";
@@ -80,7 +88,9 @@ void EncryptorDES::Decrypt()
     int real_size = 0;
     infile >> real_size;
     cout << "file real size" << real_size << endl;
-    infile.read((char*)&in, sizeof(in));
+    size= real_size % 8 ? (real_size / 8 + 1) * 8 : real_size;
+    unsigned char* in = new unsigned char[size]();
+    infile.read((char*)in, size);
     infile.close();
 
     static unsigned char cbc_iv[8] = { '0', '1', 'A', 'B', 'a', 'b', '9', '8' };
@@ -97,9 +107,7 @@ void EncryptorDES::Decrypt()
 
     memcpy(ivec, cbc_iv, sizeof(cbc_iv));
 
-    int iLength = size % 8 ? (size / 8 + 1) * 8 : size;
-    unsigned char* tmp = new unsigned char[iLength + 16];
-    memset(tmp, 0, iLength);
+    unsigned char* tmp = new unsigned char[size + 16]();
 
     DES_ncbc_encrypt(in, tmp, size, &keySchedule, &ivec, DES_DECRYPT);  //加密
 
@@ -107,13 +115,15 @@ void EncryptorDES::Decrypt()
     outfile.write((const char*)tmp, real_size);
     outfile.close();
     delete[] tmp;
-
+    delete[] in;
+    cout << "=========================================DES解密完成===================================" << endl;
 }
 
 void EncryptorDES::Encrypt_hybrid()
 {
+    cout << "=========================================混合加密===================================" << endl;
     string path;
-    unsigned char in[1024 * 13];
+    //unsigned char in[1024 * 13];
     cout << "enter the file name" << endl;
     cin >> path;
 
@@ -122,12 +132,13 @@ void EncryptorDES::Encrypt_hybrid()
     int size = infile.tellg();
     infile.seekg(0, ios::beg);
     cout << "file size" << size << endl;
+    unsigned char* in = new unsigned char[size]();
     if (!infile)
     {
         cout << "open error \n";
         return;
     }
-    infile.read((char*)&in, sizeof(in));
+    infile.read((char*)in, size);
     infile.close();
 
     static unsigned char cbc_iv[8] = { '0', '1', 'A', 'B', 'a', 'b', '9', '8' };
@@ -149,7 +160,7 @@ void EncryptorDES::Encrypt_hybrid()
 
     string deskey = (char*)keyEncrypt;
     deskey=er.Encrypt_public(deskey);
-    cout << "deskeylen" << deskey.length()<<endl;
+    //cout << "deskeylen" << deskey.length()<<endl;
 
     ofstream outfile("b", ios::out | ios::binary);
     outfile<<deskey.length();
@@ -158,15 +169,17 @@ void EncryptorDES::Encrypt_hybrid()
     outfile.write((const char*)tmp, iLength);
     //把加密后的密文写入新文件
     outfile.close();
-
-
+    delete[] in;
+    delete[] tmp;
+    cout << "=========================================混合加密完成===================================" << endl;
 }
 
 void EncryptorDES::Decrypt_hybrid()
 {
+    cout << "=========================================混合解密===================================" << endl;
     string path;
-    unsigned char keydata[1024];
-    unsigned char in[1024 * 13];
+
+    //unsigned char in[1024 * 13];
     cout << "enter the file name" << endl;
     cin >> path;
 
@@ -199,8 +212,9 @@ void EncryptorDES::Decrypt_hybrid()
 
     int real_size;
     infile >> real_size;
-
-    infile.read((char*)&in, sizeof(in));
+    size = real_size % 8 ? (real_size / 8 + 1) * 8 : real_size;
+    unsigned char* in = new unsigned char[size]();
+    infile.read((char*)in, size);
     infile.close();
 
 
@@ -219,9 +233,7 @@ void EncryptorDES::Decrypt_hybrid()
 
     memcpy(ivec, cbc_iv, sizeof(cbc_iv));
 
-    int iLength = size % 8 ? (size / 8 + 1) * 8 : size;
-    unsigned char* tmp = new unsigned char[iLength + 16];
-    memset(tmp, 0, iLength);
+    unsigned char* tmp = new unsigned char[size + 16]();
 
     DES_ncbc_encrypt(in, tmp, size, &keySchedule, &ivec, DES_DECRYPT);  //加密
 
@@ -229,13 +241,15 @@ void EncryptorDES::Decrypt_hybrid()
     outfile.write((const char*)tmp, real_size);
     outfile.close();
     delete[] tmp;
-
+    delete[] in;
+    cout << "=========================================混合解密完成===================================" << endl;
 }
 
 void EncryptorDES::Encrypt_hybrid_sign()
 {
+    cout << "=========================================混合加密带签名===================================" << endl;
     string path;
-    unsigned char in[1024 * 13];
+    //unsigned char in[1024 * 13];
     cout << "enter the file name" << endl;
     cin >> path;
 
@@ -244,19 +258,16 @@ void EncryptorDES::Encrypt_hybrid_sign()
     int size = infile.tellg();
     infile.seekg(0, ios::beg);
     cout << "file size" << size << endl;
+    unsigned char* in = new unsigned char[size]();
     if (!infile)
     {
         cout << "open error \n";
         return;
     }
-    infile.read((char*)&in, sizeof(in));
+    infile.read((char*)in, size);
     infile.close();
 
-    string msg = "";
-    for (int i = 0; i < size; i++)
-        msg = msg + (char)in[i];
-    string sign=er.signMessage(er.getKeyLocal("priKey"),msg);
-
+    string sign=er.signMessage(er.getKeyLocal("priKey"), (char*)in);
 
     static unsigned char cbc_iv[8] = { '0', '1', 'A', 'B', 'a', 'b', '9', '8' };
     DES_cblock keyEncrypt, ivec;
@@ -277,7 +288,7 @@ void EncryptorDES::Encrypt_hybrid_sign()
 
     string deskey = (char*)keyEncrypt;
     deskey = er.Encrypt_public(deskey);
-    cout << "deskeylen" << deskey.length() << endl;
+    //cout << "deskeylen" << deskey.length() << endl;
 
     ofstream outfile("b", ios::out | ios::binary);
     //新文件构成：签名长度+签名+des密钥长度+des密钥+原本文件长度+加密的文件
@@ -289,13 +300,16 @@ void EncryptorDES::Encrypt_hybrid_sign()
     outfile.write((const char*)tmp, iLength);
     //把加密后的密文写入新文件
     outfile.close();
+    delete[] in;
+    delete[] tmp;
+    cout << "=========================================混合加密带签名完成===================================" << endl;
 }
 
 void EncryptorDES::Decrypt_hybrid_verify()
 {
+    cout << "=========================================混合解密带验证===================================" << endl;
     string path;
-    unsigned char keydata[1024];
-    unsigned char in[1024 * 13];
+    //unsigned char in[1024 * 13];
     cout << "enter the file name" << endl;
     cin >> path;
 
@@ -313,7 +327,7 @@ void EncryptorDES::Decrypt_hybrid_verify()
 
     int signlen = 0;
     infile >> signlen;
-    cout << "signlen: " << signlen << "\n";
+    //cout << "signlen: " << signlen << "\n";
 
     string sign = "";
     char c;
@@ -327,7 +341,7 @@ void EncryptorDES::Decrypt_hybrid_verify()
 
     int keylen = 0;
     infile >> keylen;
-    cout << "keylen: " << keylen << "\n";
+    //cout << "keylen: " << keylen << "\n";
 
     string desKey = "";
     infile >> noskipws;
@@ -341,7 +355,9 @@ void EncryptorDES::Decrypt_hybrid_verify()
     int real_size = 0;
     infile >> real_size;
     cout << "realsize:" << real_size << endl;
-    infile.read((char*)&in, sizeof(in));
+    size = real_size % 8 ? (real_size / 8 + 1) * 8 : real_size;
+    unsigned char* in = new unsigned char[size]();
+    infile.read((char*)in, size);
     infile.close();
 
 
@@ -360,15 +376,16 @@ void EncryptorDES::Decrypt_hybrid_verify()
 
     memcpy(ivec, cbc_iv, sizeof(cbc_iv));
 
-    int iLength = size % 8 ? (size / 8 + 1) * 8 : size;
-    unsigned char* tmp = new unsigned char[iLength + 16];
-    memset(tmp, 0, iLength);
+    unsigned char* tmp = new unsigned char[size + 16];
 
     DES_ncbc_encrypt(in, tmp, size, &keySchedule, &ivec, DES_DECRYPT);  //加密
 
-    string decryptText = "";
-    for (int i = 0; i < real_size; i++)
-        decryptText = decryptText + (char)tmp[i];
+   // cout << "测试" << endl;
+
+    for (int i = real_size; i < strlen((const char*)tmp); i++)
+        tmp[i]='\0';
+    string decryptText = (char*)tmp;
+
     bool flag = er.verifySignature(er.getKeyLocal("pubKey"),decryptText,(char*)sign.c_str());
     if (flag) {
         std::cout << "Authentic" << std::endl;
@@ -381,6 +398,8 @@ void EncryptorDES::Decrypt_hybrid_verify()
     outfile.write((const char*)tmp, real_size);
     outfile.close();
     delete[] tmp;
+    delete[] in;
+    cout << "=========================================混合解密带验证完成===================================" << endl;
 }
 
 

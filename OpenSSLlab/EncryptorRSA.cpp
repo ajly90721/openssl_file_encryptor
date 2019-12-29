@@ -91,7 +91,7 @@ string EncryptorRSA::getKeyLocal(string type)
             fs >> c;
             key = key + c;
         }
-        cout << "prikey:\n" << key;
+        //cout << "prikey:\n" << key;
     }
     if (type == "pubKey")
     {
@@ -110,8 +110,8 @@ string EncryptorRSA::getKeyLocal(string type)
             fs >> c;
             key = key + c;
         }
-        cout << "pubkey length is" << key.length() << endl;
-        cout << "pubkey:\n" << key.c_str();
+        //cout << "pubkey length is" << key.length() << endl;
+        //cout << "pubkey:\n" << key.c_str();
         fs.close();
     }
     fs.close();
@@ -224,6 +224,7 @@ void EncryptorRSA::Base64Decode(const char* b64message, unsigned char** buffer, 
 }
 
 char* EncryptorRSA::signMessage(std::string privateKey, std::string plainText) {
+    cout << "开始签名" << endl;
     RSA* privateRSA = createPrivateRSA(privateKey);
     unsigned char* encMessage;
     char* base64Text;
@@ -232,15 +233,18 @@ char* EncryptorRSA::signMessage(std::string privateKey, std::string plainText) {
     RSASign(privateRSA, (unsigned char*)plainText.c_str(), plainText.length(), &encMessage, &encMessageLength);
     Base64Encode(encMessage, encMessageLength, &base64Text);
     free(encMessage);
+    cout << "签名结束" << endl;
     return base64Text;
 }
 bool EncryptorRSA::verifySignature(std::string publicKey, std::string plainText, char* signatureBase64) {
+    cout << "开始验证签名" << endl;
     RSA* publicRSA = createPublicRSA(publicKey);
     unsigned char* encMessage;
     size_t encMessageLength;
-    bool authentic;
+    bool authentic;                     
 
     Base64Decode(signatureBase64, &encMessage, &encMessageLength);
     bool result = RSAVerifySignature(publicRSA, encMessage, encMessageLength, plainText.c_str(), plainText.length(), &authentic);
+    cout << "验证结束" << endl;
     return result & authentic;
 }
